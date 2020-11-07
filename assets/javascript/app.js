@@ -72,9 +72,6 @@ if(selectWord.indexOf(letter, -1)){
 const checkarraySize = (word) => {
 	}
 
-
-
-
 gameSetup();
 
 
