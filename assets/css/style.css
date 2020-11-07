@@ -1,0 +1,22 @@
+body{
+	margin: 0;
+}
+
+h1{
+	margin: 50px 0;
+	text-align: center;
+}
+
+.container{
+	text-align: center;
+}
+
+h2{
+	margin: 50px;
+	font-size: 75px;
+
+}
+
+p{
+	padding-top: 50px;
+}
