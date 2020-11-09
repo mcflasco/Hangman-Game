@@ -22,11 +22,17 @@ let letter;
 
 // Function to select word from array
 const gameSetup = () =>{
+	
+
+	correct = 0;
+	guesses = 3;
+	
 
 	selectWord = words[Math.floor(Math.random() * words.length)].toUpperCase();
 	console.log("Selected Word:",  selectWord);
 	displayBlankWord(selectWord);
 	letterCheck()	
+	
 }
 
 
@@ -47,6 +53,7 @@ const displayBlankWord = (word) =>{
 
 	for(let i = 0; i < word.length; i++){
 		correctLetters.push("_")
+
 	}
 	displayWord.innerHTML = correctLetters.join(" ");
 	console.log("Correct Letters:", correctLetters)
@@ -61,7 +68,9 @@ const correctGuess = (letter) => {
 		incorrectLetters.push(letter)
 		guesses = guesses - 1;
 		incorrect.innerHTML = incorrectLetters.join(" ")
-		console.log("Incorrect letter added:", incorrectLetters)		
+		console.log("Incorrect letter added:", incorrectLetters)	
+
+
 
 	} else{
 
@@ -70,6 +79,7 @@ const correctGuess = (letter) => {
 			correctLetters[i] = letter
 			correct = correct + 1;
 			console.log(correct)	
+			
 		}
 	}
 }
@@ -86,19 +96,30 @@ const gameOutcome = () => {
 			displayLosses.innerHTML = losses;
 			outcome.innerHTML = "You lose!";
 			console.log("you lose");
+			incorrectLetters = []
+			correctLetters = []
+			guessedLetters = []	
+			gameSetup();
 
 	}
-	else if(correct === correctLetters.length){
+	if(correctLetters.join("").toString() === selectWord.toString()){
 		wins = wins + 1;
 		displayWins.innerHTML = wins;
 		console.log('Mikasa!');
 		outcome.innerHTML = "you won!";
 		correctLetters = []
+		incorrectLetters = []
+		guessedLetters = []	
 		gameSetup();
 		
 	}
 
 }
+
+
+
+
+
 
 gameSetup();
 
