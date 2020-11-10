@@ -1,5 +1,5 @@
 // Array of words for game
-const words = ['ford', 'chevy', 'toyota', 'nissan', 'mitsubishi', 'tesla', 'kia'];
+const words = ['ford', 'chevy', 'toyota', 'bio shock', 'mitsubishi', 'tesla', 'kia'];
 console.log("Words:", words);
 
 // Variable Declaration
@@ -8,15 +8,14 @@ let displayIncorrect = document.getElementById('incorrect');
 let displayWins = document.getElementById('wins');
 let displayLosses = document.getElementById('losses');
 let outcome = document.getElementById('outcome');
+let reset = document.getElementById('reset');
 let incorrectLetters = [];
 let correctLetters = [];
 let guessedLetters = [];
 let selectWord;
 let wins = 0;
 let losses = 0;
-let guesses = 3;
-let correct = 0;
-let games;	
+let guesses;
 let letter;
 
 
@@ -29,13 +28,13 @@ const gameSetup = () =>{
 	console.log("Selected Word:",  selectWord);
 	displayBlankWord(selectWord);
 	letterCheck()	
+
 	
 }
 
 
 // Function that takes the value of the key entered and compares it to the letters of the selected word.
 const letterCheck = () => {
-
 	document.onkeypress = function(evt){
 		letter = evt.key.toUpperCase();
 		guessedLetters.push(letter);	
@@ -46,19 +45,23 @@ const letterCheck = () => {
 
 
 const displayBlankWord = (word) =>{
-
 	for(let i = 0; i < word.length; i++){
-		correctLetters.push("_")
+		 if (word[i] == " ") {
+
+
+            correctLetters.push("&nbsp;");
+        } else {
+            correctLetters.push("_")
+        }
+		
 	}
 
 	displayWord.innerHTML = correctLetters.join(" ");
 	console.log("Correct Letters:", correctLetters)
-
 }
 
 
 const correctGuess = (letter) => {
-
 	if(selectWord.indexOf(letter) < 0){
 		incorrectLetters.push(letter)
 		guesses = guesses - 1;
@@ -70,7 +73,6 @@ const correctGuess = (letter) => {
 	for(let i = 0; i < selectWord.length; i++){
 		if(selectWord[i] == letter){
 			correctLetters[i] = letter
-			correct = correct + 1;
 			console.log(correct)	
 			
 		}
@@ -89,10 +91,9 @@ const gameOutcome = () => {
 			displayLosses.innerHTML = losses;
 			outcome.innerHTML = "You lose!";
 			console.log("you lose");
-			incorrectLetters = []
-			correctLetters = []
-			guessedLetters = []	
-			gameSetup();
+			editDisplay();
+			resetGame();
+			
 	}
 
 	else if(correctLetters.join("").toString() === selectWord.toString()){
@@ -100,14 +101,37 @@ const gameOutcome = () => {
 		displayWins.innerHTML = wins;
 		console.log('Mikasa!');
 		outcome.innerHTML = "you won!";
-		correctLetters = []
-		incorrectLetters = []
-		guessedLetters = []	
-		gameSetup();
+		editDisplay();
+		resetGame();
+		
 		
 	}
 
 }
+
+const editDisplay = () => {
+	reset.innerHTML = "<button>Continue!</button>"
+	reset.style.display = "block";
+	outcome.style.display = 'block';
+}
+
+const resetGame = () => {
+	// Change event handler to toggle for button
+	reset.addEventListener("click", function(){
+		console.log('click');
+		correctLetters = [];
+		incorrectLetters = [];
+		incorrect.innerHTML = incorrectLetters.join(" ")
+		guessedLetters = [];
+		reset.style.display = 'none';
+		outcome.style.display = 'none';
+		gameSetup();
+
+	})
+
+}
+// Find way to get around the spacing issue with double word answers
+// Stop keys from being pressed after round is done
 
 gameSetup();
 
