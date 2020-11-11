@@ -1,5 +1,5 @@
 // Array of words for game
-const words = ['ford', 'chevy', 'toyota', 'bio shock', 'mitsubishi', 'tesla', 'kia'];
+const words = ['star wars', 'harry potter', 'your highness', 'fight club', 'happy gilmore', 'rocky', 'edward scissorhands', 'grease', 'resident evil', 'bad boys', 'the waterboy', 'trading places', 'step brothers', 'top gun' ];
 console.log("Words:", words);
 
 // Variable Declaration
@@ -9,6 +9,10 @@ let displayWins = document.getElementById('wins');
 let displayLosses = document.getElementById('losses');
 let outcome = document.getElementById('outcome');
 let reset = document.getElementById('reset');
+let displayGuess = document.getElementById('guessesLeft')
+
+
+
 let incorrectLetters = [];
 let correctLetters = [];
 let guessedLetters = [];
@@ -28,6 +32,7 @@ const gameSetup = () =>{
 	console.log("Selected Word:",  selectWord);
 	displayBlankWord(selectWord);
 	letterCheck()	
+	movieApiCall(selectWord);
 
 	
 }
@@ -47,12 +52,12 @@ const letterCheck = () => {
 const displayBlankWord = (word) =>{
 	for(let i = 0; i < word.length; i++){
 		 if (word[i] == " ") {
+		
+		    correctLetters.push("&nbsp;");
 
-
-            correctLetters.push("&nbsp;");
-        } else {
+         } else {
             correctLetters.push("_")
-        }
+         }
 		
 	}
 
@@ -71,11 +76,13 @@ const correctGuess = (letter) => {
 	} else{
 
 	for(let i = 0; i < selectWord.length; i++){
+
 		if(selectWord[i] == letter){
 			correctLetters[i] = letter
-			console.log(correct)	
-			
-		}
+		
+			console.log(selectWord.toString())
+			console.log(correctLetters.toString())
+			} 
 	}
 }
 	
@@ -89,22 +96,24 @@ const gameOutcome = () => {
 	if(guesses == 0){
 			losses = losses + 1;
 			displayLosses.innerHTML = losses;
-			outcome.innerHTML = "You lose!";
+			for(let i = 0; i < selectWord.length; i++){
+			outcome.innerHTML = "You lose! The answer was '" + selectWord + "'";
+		}
 			console.log("you lose");
 			editDisplay();
 			resetGame();
 			
 	}
 
-	else if(correctLetters.join("").toString() === selectWord.toString()){
+	else if(correctLetters.join("").toString().replace("&nbsp;", " ") === selectWord){
+		console.log(selectWord.toString())
+			console.log(correctLetters.toString())
 		wins = wins + 1;
 		displayWins.innerHTML = wins;
 		console.log('Mikasa!');
-		outcome.innerHTML = "you won!";
+		outcome.innerHTML = "You win!";
 		editDisplay();
 		resetGame();
-		
-		
 	}
 
 }
@@ -130,6 +139,17 @@ const resetGame = () => {
 	})
 
 }
+
+const movieApiCall = (word) => {
+		const api = 'http://www.omdbapi.com/?apikey=';
+		const apikey = '?';
+		const query = '&t=';
+		 word = word.toLowerCase()
+		 $.getJSON(api + apikey + query + encodeURI(word)).then((response) => {
+		  	console.log(response)
+		 	
+		  })
+	}
 // Find way to get around the spacing issue with double word answers
 // Stop keys from being pressed after round is done
 
