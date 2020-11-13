@@ -37,9 +37,21 @@ h3{
 #movie{
 	
 	margin: 0 auto;
+	opacity: 0;
 		
 }
 
 img{
 	margin-top: 25px;
-}*/
+}
+
+#hint-container{
+	border:2px dashed white;
+	width:250px;
+	padding: 25px;
+	font-size: 25px;
+	text-align: center;
+	margin-left: 50px;		
+	background-color: white;
+	color: black;
+}

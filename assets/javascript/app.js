@@ -23,6 +23,7 @@ let reset = document.getElementById('reset');
 let displayGuess = document.getElementById('guessesLeft')
 let movie = document.getElementById('movie');
 let displayHint = document.getElementById('hint')
+let hintContainer = document.getElementById('hint-container');
 let incorrectLetters = [];
 let correctLetters = [];
 let guessedLetters = [];
@@ -33,6 +34,7 @@ let wins = 0;
 let losses = 0;
 let guesses = 3;
 let letter;
+let userInput = true;
 
 
 // Function to select word from array
@@ -59,12 +61,17 @@ const gameSetup = () =>{
 
 // Function that takes the value of the key entered and compares it to the letters of the selected word.
 const letterCheck = () => {
-	document.onkeypress = function(evt){
-		letter = evt.key.toUpperCase();
+	document.onkeydown = function(evt){
+		if (evt.which >= 65 && evt.which <= 90 && userInput)
+       {
+
+        letter = evt.key.toUpperCase();
 		guessedLetters.push(letter);	
 		correctGuess(letter);
+       }
+		
 	}
-	return letter;
+	return letter; 
 }
 
 
@@ -79,7 +86,7 @@ const displayBlankWord = (word) =>{
          }
 		
 	}
-	displayHint.innerHTML = "Hint: " + hint;
+	displayHint.innerHTML = hint;
 	displayWord.innerHTML = correctLetters.join(" ");
 	console.log("Correct Letters:", correctLetters)
 }
@@ -115,6 +122,7 @@ const correctGuess = (letter) => {
 
 const gameOutcome = () => {
 	if(guesses == 0){
+		userInput = false;
 			losses = losses + 1;
 			displayLosses.innerHTML = losses;
 			for(let i = 0; i < selectedWord.length; i++){
@@ -127,6 +135,7 @@ const gameOutcome = () => {
 	}
 
 	if(correctLetters.join("").toString().replace("&nbsp;", " ") === selectedWord){
+		userInput = false;
 		console.log(selectedWord.toString())
 			console.log(correctLetters.toString())
 		wins = wins + 1;
@@ -136,6 +145,7 @@ const gameOutcome = () => {
 		movie.style.display = "block";
 		editDisplay();
 		movieApiCall(selectedWord);
+
 		resetGame();
 	}
 
@@ -149,7 +159,7 @@ const editDisplay = () => {
 	reset.innerHTML = "<button>Continue!</button>"
 	reset.style.display = "block";
 	outcome.style.display = 'block';
-	displayHint.style.display = "none";
+	hintContainer.style.display = "none";
 
 	// } else{
 	// 	reset.style.display = 'none';
@@ -166,6 +176,7 @@ const hintToggle = () => {
 const resetGame = () => {
 	// Change event handler to toggle for button
 	reset.addEventListener("click", function(){
+		userInput = true;
 		console.log('click');
 		correctLetters = [];
 		incorrectLetters = [];
@@ -176,7 +187,9 @@ const resetGame = () => {
 		reset.style.display = 'none';
 	 	outcome.style.display = 'none';
 	 	movie.style.display = "none";
-	 	displayHint.style.display = "block";
+	 	$('#movie').attr('src', "");	
+
+	 	hintContainer.style.display = "block";
 		incorrect.innerHTML = incorrectLetters.join(" ")
 		guessedLetters = [];
 		
@@ -187,8 +200,9 @@ const resetGame = () => {
 }
 
 const movieApiCall = (word) => {
+
 		const api = 'http://www.omdbapi.com/?apikey=';
-		const apikey = '';
+		const apikey = '?';
 		const query = '&t=';
 		 
 		 $.getJSON(api + apikey + query + encodeURI(word)).then((response) => {
@@ -198,8 +212,11 @@ const movieApiCall = (word) => {
 		  	if(image !== "N/A"){
 		  		$('#movie').attr('src', image);	
 		  	}
-		 	
+		  	
+		 	$('#movie').fadeTo("50000", 1);
 		  })
+		 
+			
 	}
 
 // Implement start game logic (starting page with app title and start game button, when start game is pressed the dom is updates to display game logic)
