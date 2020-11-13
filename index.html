@@ -6,17 +6,18 @@
 	<title>Hangman Game</title>
 </head>
 	<body>
-		<h1>Hangman Game</h1>
+		<!-- <h1>Hangman Game - Name That Movie!</h1> -->
 		<div id="stats">
 			<h3>Wins: <span id="wins">0</span></h3>
-			<h3>Guesses: <span id="guessesLeft"></span></h3>
+			<h3>Guesses: <span id="guessesLeft">3</span></h3>
 			<h3>Losses: <span id="losses">0</span></h3>
 		</div>
 		<div class="container content">
 			<h1 id="outcome"></h1>
 			<p id="reset"></p>
-			<div id="testing">
-				<img id="movie" src="assets/images/download.png">	
+			<div>
+				<p id="hint"></p>
+				<img id="movie" >	
 				<h2 id="blanks">_ _ _ _ _ _ _ _</h2>
 				<p>Incorrect: <span id="incorrect"></span></p>	
 			</div>
