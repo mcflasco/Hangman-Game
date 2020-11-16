@@ -24,6 +24,7 @@ let displayGuess = document.getElementById('guessesLeft')
 let movie = document.getElementById('movie');
 let displayHint = document.getElementById('hint')
 let hintContainer = document.getElementById('hint-container');
+let hintButton = document.getElementById('hintBtn');
 let incorrectLetters = [];
 let correctLetters = [];
 let guessedLetters = [];
@@ -32,7 +33,7 @@ let selectedWord;
 let hint;
 let wins = 0;
 let losses = 0;
-let guesses = 3;
+let guesses;
 let letter;
 let userInput = true;
 
@@ -43,18 +44,16 @@ const gameSetup = () =>{
 	guesses = 3;
 
 	for(let i = 0; i < words.length; i++){
-			selectWord = words[Math.floor(Math.random() * words.length)]
-			selectedWord = selectWord.title.toUpperCase();
-			hint = selectWord.hint;
-			
+		selectWord = words[Math.floor(Math.random() * words.length)]
+		selectedWord = selectWord.title.toUpperCase();
+		hint = selectWord.hint;		
 	}
-			console.log(selectWord)
+
+	console.log(selectWord)
 	console.log("Selected Word:",  selectedWord);
 
 	displayBlankWord(selectedWord);
 	letterCheck()	
-	
-
 	
 }
 
@@ -62,9 +61,7 @@ const gameSetup = () =>{
 // Function that takes the value of the key entered and compares it to the letters of the selected word.
 const letterCheck = () => {
 	document.onkeydown = function(evt){
-		if (evt.which >= 65 && evt.which <= 90 && userInput)
-       {
-
+		if (evt.which >= 65 && evt.which <= 90 && userInput){
         letter = evt.key.toUpperCase();
 		guessedLetters.push(letter);	
 		correctGuess(letter);
@@ -82,10 +79,13 @@ const displayBlankWord = (word) =>{
 		    correctLetters.push("&nbsp;");
 
          } else {
+
             correctLetters.push("_")
+
          }
 		
 	}
+
 	displayHint.innerHTML = hint;
 	displayWord.innerHTML = correctLetters.join(" ");
 	console.log("Correct Letters:", correctLetters)
@@ -110,7 +110,7 @@ const correctGuess = (letter) => {
 		
 			console.log(selectedWord.toString())
 			console.log(correctLetters.toString())
-			} 
+		} 
 	}
 }
 	
@@ -123,29 +123,30 @@ const correctGuess = (letter) => {
 const gameOutcome = () => {
 	if(guesses == 0){
 		userInput = false;
-			losses = losses + 1;
-			displayLosses.innerHTML = losses;
-			for(let i = 0; i < selectedWord.length; i++){
+		losses = losses + 1;
+		displayLosses.innerHTML = losses;
+
+		for(let i = 0; i < selectedWord.length; i++){
 			outcome.innerHTML = "You lose! The answer was '" + selectedWord + "'";
 		}
-			console.log("you lose");
-			editDisplay();
-			resetGame();
-			
+
+		$('#transition').fadeTo(5000, 1);
+		console.log("you lose");
+		editDisplay();
+		resetGame();	
 	}
 
 	if(correctLetters.join("").toString().replace("&nbsp;", " ") === selectedWord){
 		userInput = false;
 		console.log(selectedWord.toString())
-			console.log(correctLetters.toString())
+		console.log(correctLetters.toString())
 		wins = wins + 1;
 		displayWins.innerHTML = wins;
 		console.log('Mikasa!');
 		outcome.innerHTML = "You win!";
-		movie.style.display = "block";
+		
 		editDisplay();
 		movieApiCall(selectedWord);
-
 		resetGame();
 	}
 
@@ -158,8 +159,14 @@ const editDisplay = () => {
 
 	reset.innerHTML = "<button>Continue!</button>"
 	reset.style.display = "block";
+	movie.style.display = "block";
 	outcome.style.display = 'block';
 	hintContainer.style.display = "none";
+
+	displayWord.style.margin = '0';		
+
+	$('#transition').fadeTo(1000, 1);
+	
 
 	// } else{
 	// 	reset.style.display = 'none';
@@ -169,9 +176,11 @@ const editDisplay = () => {
 
 }
 
-const hintToggle = () => {
-	//maybe
-}
+// Toggle Hint
+$('#hintBtn').on('click', function(){
+	$('#hint').toggle()
+	
+})
 
 const resetGame = () => {
 	// Change event handler to toggle for button
@@ -187,9 +196,10 @@ const resetGame = () => {
 		reset.style.display = 'none';
 	 	outcome.style.display = 'none';
 	 	movie.style.display = "none";
+	 	displayWord.style.margin = 'block'
 	 	$('#movie').attr('src', "");	
 
-	 	hintContainer.style.display = "block";
+	 		
 		incorrect.innerHTML = incorrectLetters.join(" ")
 		guessedLetters = [];
 		
@@ -201,23 +211,19 @@ const resetGame = () => {
 
 const movieApiCall = (word) => {
 
-		const api = 'http://www.omdbapi.com/?apikey=';
-		const apikey = '?';
-		const query = '&t=';
+	const api = 'http://www.omdbapi.com/?apikey=';
+	const apikey = '?';
+	const query = '&t=';
 		 
-		 $.getJSON(api + apikey + query + encodeURI(word)).then((response) => {
-		  	console.log(response)
-		  	const image = response.Poster
+	$.getJSON(api + apikey + query + encodeURI(word)).then((response) => {
+		console.log(response)
+		const image = response.Poster
 
-		  	if(image !== "N/A"){
-		  		$('#movie').attr('src', image);	
-		  	}
-		  	
-		 	$('#movie').fadeTo("50000", 1);
-		  })
-		 
-			
-	}
+	  	if(image !== "N/A"){
+	  		$('#movie').attr('src', image);	
+	  	}	
+	})	
+}
 
 // Implement start game logic (starting page with app title and start game button, when start game is pressed the dom is updates to display game logic)
 // add guess number logic
