@@ -1,30 +1,33 @@
 // Array of words for game
 const words = [
-		{title: 'star wars', hint: 'help me obi won, you my only hope'}, 
-		{title: 'harry potter', hint: 'your a wizard!'}, 
-		{title: 'your highness', hint: "I'm getting dark visions."},
-		{title: 'fight club', hint: 'You are not your jobs, or how much money you have in the bank.'},
-		{title: 'happy gilmore', hint: 'Its all in the hips.'},
-		{title: 'resident evil', hint: "Your're all going to die down here." },
-		{title: 'top gun', hint: 'I feel the need, the need for speed'}
-]
- // 'fight club', 'happy gilmore', 'rocky', 'edward scissorhands', 'grease', 'resident evil', 'bad boys', 'the waterboy', 'trading places', 'step brothers', 'top gun' ];
-for(let i = 0; i < words.length; i++){
-	console.log(words[i].title);
+  { title: "star wars", hint: "help me obi won, you my only hope" },
+  { title: "harry potter", hint: "your a wizard!" },
+  { title: "your highness", hint: "I'm getting dark visions." },
+  {
+    title: "fight club",
+    hint: "You are not your jobs, or how much money you have in the bank.",
+  },
+  { title: "happy gilmore", hint: "Its all in the hips." },
+  { title: "resident evil", hint: "Your're all going to die down here." },
+  { title: "top gun", hint: "I feel the need, the need for speed" },
+];
+// 'fight club', 'happy gilmore', 'rocky', 'edward scissorhands', 'grease', 'resident evil', 'bad boys', 'the waterboy', 'trading places', 'step brothers', 'top gun' ];
+for (let i = 0; i < words.length; i++) {
+  console.log(words[i].title);
 }
 
 // Variable Declaration
-let displayWord = document.getElementById('blanks');
-let displayIncorrect = document.getElementById('incorrect');
-let displayWins = document.getElementById('wins');
-let displayLosses = document.getElementById('losses');
-let outcome = document.getElementById('outcome');
-let reset = document.getElementById('reset');
-let displayGuess = document.getElementById('guessesLeft')
-let movie = document.getElementById('movie');
-let displayHint = document.getElementById('hint')
-let hintContainer = document.getElementById('hint-container');
-let hintButton = document.getElementById('hintBtn');
+let displayWord = document.getElementById("blanks");
+let displayIncorrect = document.getElementById("incorrect");
+let displayWins = document.getElementById("wins");
+let displayLosses = document.getElementById("losses");
+let outcome = document.getElementById("outcome");
+let reset = document.getElementById("reset");
+let displayGuess = document.getElementById("guessesLeft");
+let movie = document.getElementById("movie");
+let displayHint = document.getElementById("hint");
+let hintContainer = document.getElementById("hint-container");
+let hintButton = document.getElementById("hintBtn");
 let incorrectLetters = [];
 let correctLetters = [];
 let guessedLetters = [];
@@ -37,205 +40,175 @@ let guesses;
 let letter;
 let userInput = true;
 
-
 // Function to select word from array
-const gameSetup = () =>{
-	correct = 0;
-	guesses = 3;
+const gameSetup = () => {
+  correct = 0;
+  guesses = 3;
 
-	for(let i = 0; i < words.length; i++){
-		selectWord = words[Math.floor(Math.random() * words.length)]
-		selectedWord = selectWord.title.toUpperCase();
-		hint = selectWord.hint;		
-	}
+  for (let i = 0; i < words.length; i++) {
+    selectWord = words[Math.floor(Math.random() * words.length)];
+    selectedWord = selectWord.title.toUpperCase();
+    hint = selectWord.hint;
+  }
 
-	console.log(selectWord)
-	console.log("Selected Word:",  selectedWord);
+  console.log(selectWord);
+  console.log("Selected Word:", selectedWord);
 
-	displayBlankWord(selectedWord);
-	letterCheck()	
-	
-}
-
+  displayBlankWord(selectedWord);
+  letterCheck();
+};
 
 // Function that takes the value of the key entered and compares it to the letters of the selected word.
 const letterCheck = () => {
-	document.onkeydown = function(evt){
-		if (evt.which >= 65 && evt.which <= 90 && userInput){
-        letter = evt.key.toUpperCase();
-		guessedLetters.push(letter);	
-		correctGuess(letter);
-       }
-		
-	}
-	return letter; 
-}
+  document.onkeydown = function (evt) {
+    if (evt.which >= 65 && evt.which <= 90 && userInput) {
+      letter = evt.key.toUpperCase();
+      guessedLetters.push(letter);
+      correctGuess(letter);
+    }
+  };
+  return letter;
+};
 
+const displayBlankWord = (word) => {
+  for (let i = 0; i < word.length; i++) {
+    if (word[i] == " ") {
+      correctLetters.push("&nbsp;");
+    } else {
+      correctLetters.push("_");
+    }
+  }
 
-const displayBlankWord = (word) =>{
-	for(let i = 0; i < word.length; i++){
-		 if (word[i] == " ") {
-		
-		    correctLetters.push("&nbsp;");
-
-         } else {
-
-            correctLetters.push("_")
-
-         }
-		
-	}
-
-	displayHint.innerHTML = hint;
-	displayWord.innerHTML = correctLetters.join(" ");
-	console.log("Correct Letters:", correctLetters)
-}
-
+  displayHint.innerHTML = hint;
+  displayWord.innerHTML = correctLetters.join(" ");
+  console.log("Correct Letters:", correctLetters);
+};
 
 const correctGuess = (letter) => {
+  if (selectedWord.indexOf(letter) < 0) {
+    incorrectLetters.push(letter);
+    guesses = guesses - 1;
+    displayGuess.innerHTML = guesses;
+    incorrect.innerHTML = incorrectLetters.join(" ");
+    console.log("Incorrect letter added:", incorrectLetters);
+  } else {
+    for (let i = 0; i < selectedWord.length; i++) {
+      if (selectedWord[i] == letter) {
+        correctLetters[i] = letter;
 
-	if(selectedWord.indexOf(letter) < 0){
-		incorrectLetters.push(letter)
-		guesses = guesses - 1;
-		displayGuess.innerHTML = guesses;
-		incorrect.innerHTML = incorrectLetters.join(" ")
-		console.log("Incorrect letter added:", incorrectLetters)	
+        console.log(selectedWord.toString());
+        console.log(correctLetters.toString());
+      }
+    }
+  }
 
-	} else{
-
-	for(let i = 0; i < selectedWord.length; i++){
-
-		if(selectedWord[i] == letter){
-			correctLetters[i] = letter
-		
-			console.log(selectedWord.toString())
-			console.log(correctLetters.toString())
-		} 
-	}
-}
-	
-	console.log("Correct letter added:", correctLetters)
-	displayWord.innerHTML = correctLetters.join(" ")
-	gameOutcome();
-}
-
+  console.log("Correct letter added:", correctLetters);
+  displayWord.innerHTML = correctLetters.join(" ");
+  gameOutcome();
+};
 
 const gameOutcome = () => {
-	if(guesses == 0){
-		userInput = false;
-		losses = losses + 1;
-		displayLosses.innerHTML = losses;
+  if (guesses == 0) {
+    userInput = false;
+    losses = losses + 1;
+    displayLosses.innerHTML = losses;
 
-		for(let i = 0; i < selectedWord.length; i++){
-			outcome.innerHTML = "You lose! The answer was '" + selectedWord + "'";
-		}
+    for (let i = 0; i < selectedWord.length; i++) {
+      outcome.innerHTML = "You lose! The answer was '" + selectedWord + "'";
+    }
 
-		$('#transition').fadeTo(5000, 1);
-		console.log("you lose");
-		editDisplay();
-		resetGame();	
-	}
+    $("#transition").fadeTo(5000, 1);
+    console.log("you lose");
+    editDisplay();
+    resetGame();
+  }
 
-	if(correctLetters.join("").toString().replace("&nbsp;", " ") === selectedWord){
-		userInput = false;
-		console.log(selectedWord.toString())
-		console.log(correctLetters.toString())
-		wins = wins + 1;
-		displayWins.innerHTML = wins;
-		console.log('Mikasa!');
-		outcome.innerHTML = "You win!";
-		
-		editDisplay();
-		movieApiCall(selectedWord);
-		resetGame();
-	}
+  if (
+    correctLetters.join("").toString().replace("&nbsp;", " ") === selectedWord
+  ) {
+    userInput = false;
+    console.log(selectedWord.toString());
+    console.log(correctLetters.toString());
+    wins = wins + 1;
+    displayWins.innerHTML = wins;
+    console.log("Mikasa!");
+    outcome.innerHTML = "You win!";
 
-}
+    editDisplay();
+    movieApiCall(selectedWord);
+    resetGame();
+  }
+};
 
-let bool = true
+let bool = true;
 
 const editDisplay = () => {
-	// if(bool){
+  // if(bool){
 
-	reset.innerHTML = "<button>Continue!</button>"
-	reset.style.display = "block";
-	movie.style.display = "block";
-	outcome.style.display = 'block';
-	hintContainer.style.display = "none";
+  reset.innerHTML = "<button>Continue!</button>";
+  reset.style.display = "block";
+  movie.style.display = "block";
+  outcome.style.display = "block";
+  hintContainer.style.display = "none";
 
-	displayWord.style.margin = '0';		
+  displayWord.style.margin = "0";
 
-	$('#transition').fadeTo(1000, 1);
-	
+  $("#transition").fadeTo(1000, 1);
 
-	// } else{
-	// 	reset.style.display = 'none';
-	// 	outcome.style.display = 'none';
-	// 	movie.style.display = "none";
-	// }
-
-}
+  // } else{
+  // 	reset.style.display = 'none';
+  // 	outcome.style.display = 'none';
+  // 	movie.style.display = "none";
+  // }
+};
 
 // Toggle Hint
-$('#hintBtn').on('click', function(){
-	$('#hint').toggle()
-	
-})
+$("#hintBtn").on("click", function () {
+  $("#hint").toggle();
+});
 
 const resetGame = () => {
-	// Change event handler to toggle for button
-	reset.addEventListener("click", function(){
-		userInput = true;
-		console.log('click');
-		correctLetters = [];
-		incorrectLetters = [];
-		guesses = 3;
-		displayGuess.innerHTML = guesses;
-		bool = false
-		editDisplay()
-		reset.style.display = 'none';
-	 	outcome.style.display = 'none';
-	 	movie.style.display = "none";
-	 	displayWord.style.margin = 'block'
-	 	$('#movie').attr('src', "");	
+  // Change event handler to toggle for button
+  reset.addEventListener("click", function () {
+    userInput = true;
+    console.log("click");
+    correctLetters = [];
+    incorrectLetters = [];
+    guesses = 3;
+    displayGuess.innerHTML = guesses;
+    bool = false;
+    editDisplay();
+    reset.style.display = "none";
+    outcome.style.display = "none";
+    movie.style.display = "none";
+    displayWord.style.margin = "block";
+    $("#movie").attr("src", "");
 
-	 		
-		incorrect.innerHTML = incorrectLetters.join(" ")
-		guessedLetters = [];
-		
-		gameSetup();
+    incorrect.innerHTML = incorrectLetters.join(" ");
+    guessedLetters = [];
 
-	})
+    gameSetup();
+  });
+};
 
-}
+// const movieApiCall = (word) => {
+//   const api = "http://www.omdbapi.com/?apikey=";
+//   const apikey = "?";
+//   const query = "&t=";
 
-const movieApiCall = (word) => {
+//   $.getJSON(api + apikey + query + encodeURI(word)).then((response) => {
+//     console.log(response);
+//     const image = response.Poster;
 
-	const api = 'http://www.omdbapi.com/?apikey=';
-	const apikey = '?';
-	const query = '&t=';
-		 
-	$.getJSON(api + apikey + query + encodeURI(word)).then((response) => {
-		console.log(response)
-		const image = response.Poster
-
-	  	if(image !== "N/A"){
-	  		$('#movie').attr('src', image);	
-	  	}	
-	})	
-}
+//     if (image !== "N/A") {
+//       $("#movie").attr("src", image);
+//     }
+//   });
+// };
+console.log("this is a test for github")
 
 // Implement start game logic (starting page with app title and start game button, when start game is pressed the dom is updates to display game logic)
 // add guess number logic
 // Stop keys from being pressed after round is done
 
 gameSetup();
-
-
-
-
-
-
-
-
-
