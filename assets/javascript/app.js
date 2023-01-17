@@ -191,21 +191,21 @@ const resetGame = () => {
   });
 };
 
-// const movieApiCall = (word) => {
-//   const api = "http://www.omdbapi.com/?apikey=";
-//   const apikey = "?";
-//   const query = "&t=";
+const movieApiCall = (word) => {
+  const api = "http://www.omdbapi.com/?apikey=";
+  const apikey = "?";
+  const query = "&t=";
 
-//   $.getJSON(api + apikey + query + encodeURI(word)).then((response) => {
-//     console.log(response);
-//     const image = response.Poster;
+  $.getJSON(api + apikey + query + encodeURI(word)).then((response) => {
+    console.log(response);
+    const image = response.Poster;
 
-//     if (image !== "N/A") {
-//       $("#movie").attr("src", image);
-//     }
-//   });
-// };
-console.log("this is a test for github")
+    if (image !== "N/A") {
+      $("#movie").attr("src", image);
+    }
+  });
+};
+
 
 // Implement start game logic (starting page with app title and start game button, when start game is pressed the dom is updates to display game logic)
 // add guess number logic
